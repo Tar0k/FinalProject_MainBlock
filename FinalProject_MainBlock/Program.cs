@@ -24,33 +24,37 @@ Console.WriteLine("-------------------------------------------------------------
 
 var userSelect = GetUserInt(variableDescription: "номер опции", minLimit:1, maxLimit:2);
 
-string[] testArray = 
-
-switch (userSelect)
+var testArray = userSelect switch
 {
-    case 1:
-        foreach (var example in examples.Select((item, index) => (item, index)))
-        {
-            Console.WriteLine($"{example.index + 1}: Пример {FormattedStringFromArray(example.item)}");
-        }
-        var chosenExample = GetUserInt(variableDescription: "номер \"примера\"", minLimit:1, maxLimit: examples.Count);
-        testArray = examples[chosenExample - 1];
-        break;
-    case 2:
-        var testArraySize = GetUserInt(variableDescription: "размер массива", minLimit: 1);
-        testArray = new string[testArraySize];
-        for (var i=0; i < testArray.Length; i++)
-        {
-            Console.Write($"Введите {i + 1} элемент: ");
-            testArray[i] = Console.ReadLine() ?? "";
-        }
-        Console.WriteLine($"Введен массив {FormattedStringFromArray(testArray)}");
-        break;
-}
+    1 => SelectFromExamples(examples),
+    2 => GetUserArray(),
+    _ => throw new ArgumentOutOfRangeException()
+};
 Console.WriteLine(FormattedStringFromArray(testArray));
 
 
+string[] SelectFromExamples(IReadOnlyList<string[]> examplesList)
+{
+    foreach (var example in examplesList.Select((item, index) => (item, index)))
+    {
+        Console.WriteLine($"{example.index + 1}: Пример {FormattedStringFromArray(example.item)}");
+    }
+    var chosenExample = GetUserInt(variableDescription: "номер \"примера\"", minLimit:1, maxLimit: examplesList.Count);
+    return examplesList[chosenExample - 1];
+}
 
+string[] GetUserArray()
+{
+    var userArraySize = GetUserInt(variableDescription: "размер массива", minLimit: 1);
+    var userArray = new string[userArraySize];
+    for (var i=0; i < userArray.Length; i++)
+    {
+        Console.Write($"Введите {i + 1} элемент: ");
+        userArray[i] = Console.ReadLine() ?? "";
+    }
+    Console.WriteLine($"Введен массив {FormattedStringFromArray(userArray)}");
+    return userArray;
+}
 
 string FormattedStringFromArray(IEnumerable<string> array)
 {
