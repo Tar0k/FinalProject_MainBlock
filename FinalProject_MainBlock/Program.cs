@@ -24,13 +24,15 @@ Console.WriteLine("-------------------------------------------------------------
 
 var userSelect = GetUserInt(variableDescription: "номер опции", minLimit:1, maxLimit:2);
 
-var testArray = userSelect switch
+var inputArray = userSelect switch
 {
     1 => SelectFromExamples(examples),
     2 => GetUserArray(),
-    _ => throw new ArgumentOutOfRangeException()
+    _ => throw new ArgumentOutOfRangeException(paramName: $"testArray", message: "Вот как-то так.")
 };
-Console.WriteLine(FormattedStringFromArray(testArray));
+Console.WriteLine("---------------------------------------------------------------------------------------------------");
+var outputArray = inputArray.Where(element => element.Length <= 3);
+Console.WriteLine($"Результат: {FormattedStringFromArray(outputArray)}");
 
 
 string[] SelectFromExamples(IReadOnlyList<string[]> examplesList)
