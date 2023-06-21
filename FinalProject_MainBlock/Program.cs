@@ -21,7 +21,6 @@ Console.WriteLine("-------------------------------------------------------------
 Console.WriteLine("1. Выбрать ввод из \"примеров\"");
 Console.WriteLine("2. Ввести массив в ручную");
 Console.WriteLine("---------------------------------------------------------------------------------------------------");
-
 var userSelect = GetUserInt(variableDescription: "номер опции", minLimit:1, maxLimit:2);
 
 var inputArray = userSelect switch
@@ -31,8 +30,39 @@ var inputArray = userSelect switch
     _ => throw new ArgumentOutOfRangeException(paramName: $"testArray", message: "Вот как-то так.")
 };
 Console.WriteLine("---------------------------------------------------------------------------------------------------");
-var outputArray = inputArray.Where(element => element.Length <= 3);
+
+/* Легкое решение
+var outputArray = inputArray.Where(element => element.Length <= 3).ToArray(); // Легкое решение, не по блок-схеме
 Console.WriteLine($"Результат: {FormattedStringFromArray(outputArray)}");
+*/
+
+// Решение по блок-схеме
+var iterator = 0;
+var inputArrLength = inputArray.Length;
+var filteredElements = 0;
+while (iterator < inputArrLength)
+{
+    if (inputArray[iterator].Length <= 3) filteredElements++;
+    iterator++;
+}
+
+if (filteredElements > 0)
+{
+    iterator = 0;
+    var outputArray = new string[filteredElements];
+    var outputIterator = 0;
+    while (iterator < inputArrLength)
+    {
+        if (inputArray[iterator].Length <= 3)
+        {
+            outputArray[outputIterator] = inputArray[iterator];
+            outputIterator++;
+        }
+        iterator++;
+    }
+    Console.WriteLine($"Результат: {FormattedStringFromArray(outputArray)}");
+}
+else Console.WriteLine($"Результат: []");
 
 
 string[] SelectFromExamples(IReadOnlyList<string[]> examplesList)
